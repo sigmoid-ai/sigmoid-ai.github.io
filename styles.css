@@ -1,5 +1,5 @@
 html, body {
-    font-family: Avenir Next;
+    font-family: Raleway;
     padding: 0;
     margin: 0;
 }
@@ -49,6 +49,12 @@ a {
     color: rgb(88, 88, 88);
     background: white;
     border-radius: 5px;
+}
+
+#hero #sign-in-button:hover {
+    opacity: 0.85;
+    cursor: pointer;
+    transition: 0.5s;
 }
 
 #hero #logo-top {
@@ -167,6 +173,7 @@ a {
 
 #hero #right #container #sign-up-button:hover {
     opacity: 0.85;
+    cursor: pointer;
     transition: 0.5s;
 }
 
