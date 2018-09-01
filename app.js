@@ -24,15 +24,28 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(emailSignUp.value)
         validEmail = validateEmail(emailSignUp.value)
         if (validEmail) {
-            var userID = makeID()
-            DBref.child('USERS').child(userID).set({
-                'email': emailSignUp.value,
-                'userID': userID
+            var emailThere = false
+            DBref.child('USERS').on('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                    if (child.val()['email'] === emailSignUp.value) {
+                        emailMessage.innerText = 'Oops! Looks like you already signed up...'
+                        emailThere = true
+                    }
+                })
             })
-            emailSignUp.value = ''
-            emailMessage.style.display = 'block'
+            if (emailThere == false) {
+                var userID = makeID()
+                DBref.child('USERS').child(userID).set({
+                    'email': emailSignUp.value,
+                    'userID': userID
+                })
+                emailSignUp.value = ''
+                emailMessage.innerText = 'Welcome on board. Check your inbox for more!'
+                emailMessage.style.display = 'block'
+            }
         } else {
-            console.log('Invalid email')
+            // emailMessage.style.display = 'block'
+            emailMessage.innerText = 'Hold up! Please enter a valid Email address.'
         }
     }
 
