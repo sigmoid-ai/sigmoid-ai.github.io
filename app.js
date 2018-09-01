@@ -1,10 +1,10 @@
 var config = {
-    apiKey: "AIzaSyCTF4OsQ1tvnyabjE_dZpEJ3nwE2GkIS-4",
-    authDomain: "sigmoid-3e5f4.firebaseapp.com",
-    databaseURL: "https://sigmoid-3e5f4.firebaseio.com",
-    projectId: "sigmoid-3e5f4",
-    storageBucket: "sigmoid-3e5f4.appspot.com",
-    messagingSenderId: "841883044467"
+    apiKey: codes.apiKey,
+    authDomain: codes.authDomain,
+    databaseURL: code.databaseURL,
+    projectId: code.projectId,
+    storageBucket: code.storageBucket,
+    messagingSenderId: code.messagingSenderId
 };
 firebase.initializeApp(config);
 
