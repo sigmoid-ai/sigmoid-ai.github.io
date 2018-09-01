@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     var signUpButton = document.getElementById('sign-up-button')
     var signInButton = document.getElementById('sign-in-button')
 
+    var emailMessage = document.getElementById('email-message')
+
     signUpButton.onclick = () => {
         console.log(emailSignUp.value)
         validEmail = validateEmail(emailSignUp.value)
@@ -27,6 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 'email': emailSignUp.value,
                 'userID': userID
             })
+            emailSignUp.value = ''
+            emailMessage.style.display = 'block'
         } else {
             console.log('Invalid email')
         }

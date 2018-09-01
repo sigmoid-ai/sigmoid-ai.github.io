@@ -95,7 +95,7 @@ a {
     position: relative;
     width: 85%;
     margin: 50px auto 0 auto;
-    height: auto;
+    height: 350px;
 }
 
 #hero #right #container #title {
@@ -168,6 +168,14 @@ a {
 #hero #right #container #sign-up-button:hover {
     opacity: 0.85;
     transition: 0.5s;
+}
+
+#hero #email-message {
+    padding: 0;
+    font-size: 15px;
+    color: #888787;
+    font-weight: 600;
+    display: none;
 }
 
 /* -------------------------------------------------------------------------------------------------------------- */
