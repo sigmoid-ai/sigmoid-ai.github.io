@@ -9,16 +9,34 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:500,600,700" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
+
         <script src="params.js"></script>
         <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
-        <script src="app.js"></script>
+
+        <script src="app.js"></script> 
     </head>
 
     <body>
 
+        <div id="login-box">
+            <i class="fas fa-times" id="close-login-modal"></i>
+            <p id="logo-login">sigmoid</p>
+            <p id="login-box-top-text">Sign In</p>
+            <input type="text" placeholder="Your Fullname" id="sign-in-name">
+            <br>
+            <input type="email" placeholder="Your Email" id="sign-in-email">
+            <br>
+            <input type="password" placeholder="Password" id="sign-in-pwd">
+            <br>
+            <div id="buttons">
+                <button id="sign-in-submit">Submit</button>
+                <p id="register-button">Sign Up instead</p>
+            </div>
+        </div>
+
         <div id="hero">
             <p id="logo-top">sigmoid</p>
-            <a href="dashboard.html"><button id="sign-in-button">Sign In</button></a>
+            <button id="sign-in-button">Sign In</button>
 
             <div id="left">
                 <p id="logo">sigmoid</p>
@@ -33,6 +51,7 @@
                     </p>
                     <p id="subtitle">
                         Create, train, test and deploy Machine Learning models without expensive hardware.
+                        <!-- Why should creating, training, testing and deploying models be so difficult? -->
                     </p>
                     <div id="social">
                         <i class="fab fa-twitter"></i>

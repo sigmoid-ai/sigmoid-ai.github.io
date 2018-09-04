@@ -14,38 +14,75 @@ document.addEventListener('DOMContentLoaded', () => {
     var DBref = firebase.database().ref()
     var Strref = firebase.storage().ref()
 
-    var emailSignUp = document.getElementById('sign-up-field')
-    var signUpButton = document.getElementById('sign-up-button')
-    var signInButton = document.getElementById('sign-in-button')
+    const emailSignUp = document.getElementById('sign-up-field')
+    const signUpButton = document.getElementById('sign-up-button')
+    const signInButton = document.getElementById('sign-in-button')
+    const loginModal = document.getElementById('login-box')
+    const left = document.getElementById('left')
+    const right = document.getElementById('right')
 
+    const registerButton = document.getElementById('register-button')
+    const loginModalTopText = document.getElementById('login-box-top-text')
     var emailMessage = document.getElementById('email-message')
 
+    const closeLoginModal = document.getElementById('close-login-modal')
+
+    const nameField = document.getElementById('sign-in-name')
+    const modalEmailField = document.getElementById('sign-in-email')
+    const modalPwdField = document.getElementById('sign-in-pwd')
+    const modalSubmit = document.getElementById('sign-in-submit')
+
+    var signIn = 0
+
+    closeLoginModal.onclick = () => {
+        loginModal.style.display = 'none'
+        left.style.opacity = 1
+        right.style.opacity = 1
+    }
+
+    signInButton.onclick = () => {
+        loginModal.style.display = 'block'
+        left.style.opacity = 0.2
+        right.style.opacity = 0.2
+    }
+
     signUpButton.onclick = () => {
-        console.log(emailSignUp.value)
-        validEmail = validateEmail(emailSignUp.value)
-        if (validEmail) {
-            var emailThere = false
-            DBref.child('USERS').on('value', (snapshot) => {
-                snapshot.forEach((child) => {
-                    if (child.val()['email'] === emailSignUp.value) {
-                        emailMessage.innerText = 'Oops! Looks like you already signed up...'
-                        emailThere = true
-                    }
-                })
-            })
-            if (emailThere == false) {
-                var userID = makeID()
-                DBref.child('USERS').child(userID).set({
-                    'email': emailSignUp.value,
-                    'userID': userID
-                })
-                emailSignUp.value = ''
-                emailMessage.innerText = 'Welcome on board. Check your inbox for more!'
-                emailMessage.style.display = 'block'
-            }
+        if (validateEmail(emailSignUp.value)) {
+            left.style.opacity = 0.2
+            right.style.opacity = 0.2
+            loginModal.style.display = 'block'
+            nameField.style.visibility = 'visible'
+            loginModalTopText.innerText = 'Sign Up'
+            registerButton.innerHTML = 'Login instead'
+
+            modalEmailField.value = emailSignUp.value
+            emailSignUp.value = ''
         } else {
-            // emailMessage.style.display = 'block'
-            emailMessage.innerText = 'Hold up! Please enter a valid Email address.'
+            emailMessage.innerText = 'Oops! Please enter a valid email...'
+        }
+    }
+
+    registerButton.onclick = () => {
+        left.style.opacity = 0.2
+        right.style.opacity = 0.2
+        if (signIn == 0) { // Login
+            registerButton.innerHTML = 'Sign Up instead'
+            nameField.style.visibility = 'hidden'
+            loginModalTopText.innerText = 'Sign In'
+            signIn = 1
+        } else if (signIn == 1) { // Register
+            registerButton.innerHTML = 'Login instead'
+            nameField.style.visibility = 'visible'
+            loginModalTopText.innerText = 'Sign Up'
+            signIn = 0
+        }
+    }
+
+    modalSubmit.onclick = () => {
+        if (validateEmail(modalEmailField.value) && modalPwdField.value.length > 0 || validateEmail(modalEmailField.value) && modalPwdField.value.length > 0 && nameField.value.length > 0) { 
+            console.log('Logged in')
+        } else {
+            console.log('Invalid credentials! Try again...')
         }
     }
 
