@@ -13,32 +13,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var DBref = firebase.database().ref()
     var Strref = firebase.storage().ref()
-
-    const emailSignUp = document.getElementById('sign-up-field')
-    const signUpButton = document.getElementById('sign-up-button')
+    
     const signInButton = document.getElementById('sign-in-button')
+    const signUpButton = document.getElementById('sign-up-button')
+
     const loginModal = document.getElementById('login-box')
+    const registerModal = document.getElementById('register-box')
+
+    const loginModalEmail = document.getElementById('sign-in-email')
+    const loginModalPwd = document.getElementById('sign-in-pwd')
+
+    const registerModalName = document.getElementById('sign-up-name')
+    const registerModalEmail = document.getElementById('sign-up-email')
+    const registerModalPwd = document.getElementById('sign-up-pwd')
+
+    const loginModalSubmit = document.getElementById('sign-in-submit')
+    const registerModalSubmit = document.getElementById('sign-up-submit')
+
+    const loginRegisterButton = document.getElementById('login-register-button')
+    const registerLoginButton = document.getElementById('register-login-button')
+
+    const loginModalClose = document.getElementById('close-login-modal')
+    const registerModalClose = document.getElementById('close-register-modal')
+
+    const heroEmail = document.getElementById('sign-up-field')
+    const emailMessage = document.getElementById('email-message')
+
     const left = document.getElementById('left')
     const right = document.getElementById('right')
-
-    const registerButton = document.getElementById('register-button')
-    const loginModalTopText = document.getElementById('login-box-top-text')
-    var emailMessage = document.getElementById('email-message')
-
-    const closeLoginModal = document.getElementById('close-login-modal')
-
-    const nameField = document.getElementById('sign-in-name')
-    const modalEmailField = document.getElementById('sign-in-email')
-    const modalPwdField = document.getElementById('sign-in-pwd')
-    const modalSubmit = document.getElementById('sign-in-submit')
-
-    var signIn = 0
-
-    closeLoginModal.onclick = () => {
-        loginModal.style.display = 'none'
-        left.style.opacity = 1
-        right.style.opacity = 1
-    }
 
     signInButton.onclick = () => {
         loginModal.style.display = 'block'
@@ -46,44 +48,76 @@ document.addEventListener('DOMContentLoaded', () => {
         right.style.opacity = 0.2
     }
 
+    loginRegisterButton.onclick = () => {
+        loginModal.style.display = 'none'
+        registerModal.style.display = 'block'
+    }
+
+    registerLoginButton.onclick = () => {
+        loginModal.style.display = 'block'
+        registerModal.style.display = 'none'
+    }
+
     signUpButton.onclick = () => {
-        if (validateEmail(emailSignUp.value)) {
+        if (validateEmail(heroEmail.value)) {
+            var randomID = makeID()
+            DBref.child('Sign Ups').child(randomID).set(heroEmail.value)
+            registerModalEmail.value = heroEmail.value
+            registerModalName.value = ''
+            registerModalPwd.value = ''
+            heroEmail.value = ''
+            registerModal.style.display = 'block'
+
             left.style.opacity = 0.2
             right.style.opacity = 0.2
-            loginModal.style.display = 'block'
-            nameField.style.visibility = 'visible'
-            loginModalTopText.innerText = 'Sign Up'
-            registerButton.innerHTML = 'Login instead'
-
-            modalEmailField.value = emailSignUp.value
-            emailSignUp.value = ''
         } else {
-            emailMessage.innerText = 'Oops! Please enter a valid email...'
+            emailMessage.innerText = "Oops! That doesn't look like an email..."
         }
     }
 
-    registerButton.onclick = () => {
-        left.style.opacity = 0.2
-        right.style.opacity = 0.2
-        if (signIn == 0) { // Login
-            registerButton.innerHTML = 'Sign Up instead'
-            nameField.style.visibility = 'hidden'
-            loginModalTopText.innerText = 'Sign In'
-            signIn = 1
-        } else if (signIn == 1) { // Register
-            registerButton.innerHTML = 'Login instead'
-            nameField.style.visibility = 'visible'
-            loginModalTopText.innerText = 'Sign Up'
-            signIn = 0
-        }
+    registerModalSubmit.onclick = () => {
+        var promise = firebase.auth().createUserWithEmailAndPassword(registerModalEmail.value, registerModalPwd.value)
+        promise.catch((err) => {
+            console.log(err.message)
+        })
+        promise.then((user) => {
+            var randomID = makeID()
+            DBref.child('Users').child(randomID).set({
+                'userID': randomID,
+                'email': registerModalEmail.value,
+                'pwd': registerModalPwd.value
+            })
+            window.location = 'dashboard.html'
+        })
     }
 
-    modalSubmit.onclick = () => {
-        if (validateEmail(modalEmailField.value) && modalPwdField.value.length > 0 || validateEmail(modalEmailField.value) && modalPwdField.value.length > 0 && nameField.value.length > 0) { 
-            console.log('Logged in')
-        } else {
-            console.log('Invalid credentials! Try again...')
-        }
+    loginModalSubmit.onclick = () => {
+        var promise = firebase.auth().signInWithEmailAndPassword(loginModalEmail.value, loginModalPwd.value)
+        promise.catch((err) => {
+            console.log(err.message)
+        })
+        promise.then((user) => {
+            print (user)
+            var randomID = makeID()
+            DBref.child('Users').child(randomID).set({
+                'userID': randomID,
+                'email': loginModalEmail.value,
+                'pwd': loginModalPwd.value
+            })
+            window.location = 'dashboard.html'
+        })
+    }
+
+    loginModalClose.onclick = () => {
+        loginModal.style.display = 'none'
+        left.style.opacity = 1
+        right.style.opacity = 1
+    }
+
+    registerModalClose.onclick = () => {
+        registerModal.style.display = 'none'
+        left.style.opacity = 1
+        right.style.opacity = 1
     }
 
     function validateEmail(email) {
