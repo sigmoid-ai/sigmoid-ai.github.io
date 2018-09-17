@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Sigmoid | New Project</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://fonts.googleapis.com/css?family=Raleway:500,600,700,800" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+        <script src="project_card.js"></script>
+        <link rel="stylesheet" type="text/css" media="screen" href="project.css" />
+        <script src="project.js"></script>
+    </head>
+
+    <body>
+
+        <div id="header">
+            <div id="logo">
+                <p>sigmoid</p>
+            </div>
+            <div id="menu">
+                <p>Projects</p>
+                <p>About</p>
+                <p>Help</p>
+                <button id="add-project-button"><i class="fas fa-plus"></i></button>
+                <button id="sign-out-button">Log out</button>
+            </div>
+        </div>
+
+        <div id="project-body">
+            <p id="section-title">New Project</p>
+
+            <div id="project-specs">
+                <div>
+                    <p id="project-prompts">Give your project a name</p>
+                    <input type="text" id="new-project-title" placeholder="My ML Model">
+                </div>
+
+                <div>
+                    <p id="project-prompts">How many classes?</p>
+                    <input type="text" id="new-project-classes" placeholder="10">
+                </div>
+            </div>
+
+            <p id="project-prompts">Choose the type of project</p>
+            <div id="types-container">
+                <div class="type-card" id="classification">
+                    <p class="type-card-title">Classification</p>
+                </div>
+
+                <div class="type-card" id="recognition">
+                    <p class="type-card-title">Recognition</p>
+                </div>
+
+                <div class="type-card" id="estimation">
+                    <p class="type-card-title">Estimation</p>
+                </div>
+            </div>
+
+            <p id="project-prompts">What kind of data are you working with?</p>
+            <div id="data-container">
+                <div class="data-card" id="images">
+                    <p class="data-card-logo"><i class="far fa-image"></i></p>
+                    <p class="data-card-title">Images</p>
+                </div>
+
+                <div class="data-card" id="text">
+                    <p class="data-card-logo"><i class="far fa-file-alt"></i></p>
+                    <p class="data-card-title">Text</p>
+                </div>
+
+                <div class="data-card" id="audio">
+                    <p class="data-card-logo"><i class="fas fa-music"></i></p>
+                    <p class="data-card-title">Audio</p>
+                </div>
+            </div>
+
+            <p id="project-prompts">Add training data</p>
+            <input type="file" id="choose-training-data" multiple>
+            <button id="training-data-choose-button"><i class="fas fa-upload"></i></button>
+
+            <p id="total-instances">Total number of instances: <span>0</span></p>
+            <p id="num-classes">Number of classes: <span>0</span></p>
+
+            <div id="training-data-container">
+            
+            </div>
+
+            <button id="train-button">Start Training <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+    </body>
+</html>

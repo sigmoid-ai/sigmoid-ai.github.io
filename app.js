@@ -81,13 +81,15 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(err.message)
         })
         promise.then((user) => {
+            print (user)
             var randomID = makeID()
             DBref.child('Users').child(randomID).set({
+                'name': registerModalName.value,
                 'userID': randomID,
                 'email': registerModalEmail.value,
                 'pwd': registerModalPwd.value
             })
-            window.location = 'dashboard.html'
+            window.location = 'comingsoon.html'
         })
     }
 
@@ -98,13 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         promise.then((user) => {
             print (user)
-            var randomID = makeID()
-            DBref.child('Users').child(randomID).set({
-                'userID': randomID,
-                'email': loginModalEmail.value,
-                'pwd': loginModalPwd.value
-            })
-            window.location = 'dashboard.html'
+            window.location = 'comingsoon.html'
         })
     }
 
