@@ -1,3 +1,13 @@
+var config = {
+    apiKey: codes.apiKey,
+    authDomain: codes.authDomain,
+    databaseURL: codes.databaseURL,
+    projectId: codes.projectId,
+    storageBucket: codes.storageBucket,
+    messagingSenderId: codes.messagingSenderId
+};
+firebase.initializeApp(config);
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('App loaded')
 
@@ -71,12 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(dataBlockChosen)
     }
 
-    addDataButton.onclick = () => {
-        console.log('Adding training data')
-        fileChoose.click()      
-        fileChoose.addEventListener('change', (event) => {
-            console.log(event)
-        })
+    addDataButton.onclick = function() {
+        var classCard = new ClassBlock()
+        classCard.addClass(dataContainer)
     }
 
 })

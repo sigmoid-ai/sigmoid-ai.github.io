@@ -105,20 +105,89 @@ ClassBlock.prototype.addClass = function(workspace) {
     var newCard = document.createElement('div')
     newCard.classList += 'training-data-card'
 
+    var top = document.createElement('div')
+    top.classList = 'tdc-top'
+
+    var bottom = document.createElement('div')
+    bottom.classList = 'tdc-bottom'
+
     var cardLabel = document.createElement('input')
     cardLabel.type = 'text'
-    cardLabel.placeholder = 'Dog'
+    cardLabel.placeholder = 'Class label'
     cardLabel.innerHTML = this.label
     cardLabel.classList += 'training-data-class'
 
     var cardNumInstances = document.createElement('p')
     cardNumInstances.innerHTML = this.numberOfInstances + ' Instances'
-    cardNumInstances.classList += 'num-training-instances' 
+    cardNumInstances.classList += 'num-training-instances'
 
-    newCard.appendChild(cardLabel)
-    newCard.appendChild(cardNumInstances)
+    var fileChoose = document.createElement('input')
+    fileChoose.type = 'file'
+    fileChoose.classList = 'tdc-file-choose'
+    // fileChoose.attributes += 'multiple'
+    // fileChoose.attributes += 'directory'
+    // fileChoose.attributes += 'webkitdirectory'
+    fileChoose.setAttribute('multiple', 'true')
+    fileChoose.setAttribute('directory', 'true')
+    fileChoose.setAttribute('webkitdirectory', 'true')
+
+    var uploadButton = document.createElement('button')
+    uploadButton.classList = 'tdc-upload-button'
+    uploadButton.innerHTML = '<i class="fas fa-upload"></i>'
+
+    uploadButton.addEventListener('click', () => {
+        fileChoose.click()
+        fileChoose.addEventListener('change', function() {
+            var files = handleFileUploadChange(fileChoose)
+            handleFileUploadSubmit(files)
+        })
+    })
+
+    top.appendChild(cardLabel)
+    top.appendChild(cardNumInstances)
+
+    bottom.appendChild(fileChoose)
+    bottom.appendChild(uploadButton)
+
+    newCard.appendChild(top)
+    newCard.appendChild(bottom)
 
     workspace.appendChild(newCard)
+}
+
+function handleFileUploadChange(e) {
+    let selectedFile
+    selectedFile = e.files;
+    return selectedFile
+}
+
+function handleFileUploadSubmit(selectedFile) {
+    var userID = randomID()
+    var projectID = randomID()
+    const ref = firebase.storage().ref()
+
+    for (var i = 0; i < selectedFile.length; i++) {
+        const uploadTask = ref.child('Training Data').child(userID).child(projectID).child('Class').child(selectedFile[i].name).put(selectedFile[i]); //create a child directory called images, and place the file inside this directory
+        uploadTask.on('state_changed', (snapshot) => {
+        // Observe state change events such as progress, pause, and resume
+            console.log(snapshot)
+        }, (error) => {
+          // Handle unsuccessful uploads
+          console.log(error);
+        }, () => {
+           // Do something once upload is complete
+           console.log('Images sent');
+        })
+    }
+}
+
+function randomID() {
+    var randomID = ''
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    for (var i = 0; i < 8; i++) {
+        randomID += possible.charAt(Math.floor(Math.random() * possible.length))
+    }
+    return randomID        
 }
 
 // ------------------------------------------------------------------------------------------------------------------------
