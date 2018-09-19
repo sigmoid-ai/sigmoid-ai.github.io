@@ -11,6 +11,9 @@ firebase.initializeApp(config);
 document.addEventListener('DOMContentLoaded', () => {
     console.log('App loaded')
 
+    var userID = randomID()
+    var projectID = randomID()
+
     const projectName = document.getElementById('new-project-title')
     const projectClasses = document.getElementById('new-project-classes')
 
@@ -26,8 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const addDataButton = document.getElementById('training-data-choose-button')
     const dataContainer = document.getElementById('training-data-container')
 
+    const getStartedButton = document.getElementById('train-button')
+
     var typeBlockChosen = 1
     var dataBlockChosen = 1
+
+    var TYPES = ['Classification', 'Recognition', 'Estimation']
+    var DATA = ['Images', 'Text', 'Audio']
+
+    var CLASSLABELS = []
 
     var numClasses = 0
 
@@ -83,7 +93,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addDataButton.onclick = function() {
         var classCard = new ClassBlock()
-        classCard.addClass(dataContainer)
+        classCard.addClass(dataContainer, userID, projectID)
+        numClasses += 1
+        CLASSLABELS.push(classCard.getLabel())
+    }
+
+    getStartedButton.onclick = function() {
+        const ref = firebase.database().ref()
+        ref.child('Training Data').child(userID).child(projectID).set({
+            'Title': projectName.value,
+            'Classes': numClasses,
+            'Project type': TYPES[typeBlockChosen-1],
+            'Project data': DATA[dataBlockChosen-1],
+            'userID': userID,
+            'projectID': projectID
+        }).then(() => {
+            console.log('Data sent')
+            window.location = 'dashboard.html'
+        })
+    }
+
+    function randomID() {
+        var string = ''
+        var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        for (var i = 0; i < 8; i++) {
+            string += possible.charAt(Math.floor(Math.random() * possible.length))
+        }
+        return string
     }
 
 })
