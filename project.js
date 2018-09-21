@@ -11,11 +11,10 @@ firebase.initializeApp(config);
 document.addEventListener('DOMContentLoaded', () => {
     console.log('App loaded')
 
-    var userID = randomID()
+    var userID = 'USER1'
     var projectID = randomID()
 
     const projectName = document.getElementById('new-project-title')
-    const projectClasses = document.getElementById('new-project-classes')
 
     const classificationBlock = document.getElementById('classification')
     const recognitionBlock = document.getElementById('recognition')
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const textBlock = document.getElementById('text')
     const audioBlock = document.getElementById('audio')
 
-    const fileChoose = document.getElementById('choose-training-data')
     const addDataButton = document.getElementById('training-data-choose-button')
     const dataContainer = document.getElementById('training-data-container')
 
@@ -100,14 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     getStartedButton.onclick = function() {
         const ref = firebase.database().ref()
-        ref.child('Training Data').child(userID).child(projectID).set({
+        var projectObject = {
             'Title': projectName.value,
             'Classes': numClasses,
             'Project type': TYPES[typeBlockChosen-1],
             'Project data': DATA[dataBlockChosen-1],
             'userID': userID,
-            'projectID': projectID
-        }).then(() => {
+            'projectID': projectID,
+            'running': false,
+            'deployed': false,
+            'REST URL': 'www.sigmoid.com/' + projectID,
+            'Class labels': CLASSLABELS
+        }
+        ref.child('Training Data').child(userID).child(projectID).set(projectObject).then(() => {
             console.log('Data sent')
             window.location = 'dashboard.html'
         })
@@ -122,4 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return string
     }
 
+    var setURL = function() {
+        var RESTEndpoint = ''
+        var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        for (var i = 0; i < 8; i++) {
+            RESTEndpoint += possible.charAt(Math.floor(Math.random() * possible.length))
+        }
+        return 'www.sigmoid.com/' + RESTEndpoint
+    }
 })

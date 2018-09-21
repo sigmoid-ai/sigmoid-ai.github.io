@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         snapshot.forEach((child) => {
             child.forEach((child2) => {
                 var data = child2.val()
-                newProjectCard(data['Title'], data['Project type'], data['Classes'])
+                console.log(data['userID'])
+                newProjectCard(data['projectID'], data['userID'], data['Title'], data['Project type'], data['Classes'], data['REST URL'])
             })
         })
     })
@@ -31,10 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location = 'project.html'
     }
 
-    function newProjectCard(title, type, classes) {
+    function newProjectCard(pID, uID, title, type, classes, url) {
         var projectCard = new ProjectCard()
-        projectCard.projectInit(title, type, classes)
-        projectCard.addProjectCard(projectWorkspace)
+        projectCard.projectInit(title, type, classes, url)
+        projectCard.addProjectCard(projectWorkspace, uID, pID)
         numberJobs += 1
         jobsTotal.innerHTML = numberJobs
     }

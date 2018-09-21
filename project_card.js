@@ -2,18 +2,19 @@ function ProjectCard() {
     this.title = null
     this.type = null
     this.numClasses = null
-    this.restURL = setURL()
+    this.restURL = null
     this.status = 'red-circle'
     this.training = false
 }
 
-ProjectCard.prototype.projectInit = function(title, type, numClasses) {
+ProjectCard.prototype.projectInit = function(title, type, numClasses, url) {
     this.title = title
     this.type = type
     this.numClasses = numClasses
+    this.restURL = url
 }
 
-ProjectCard.prototype.addProjectCard = function(workspace) {
+ProjectCard.prototype.addProjectCard = function(workspace, userID, projectID) {
     console.log('Adding new project card')
 
     var newCard = document.createElement('tr')
@@ -44,11 +45,11 @@ ProjectCard.prototype.addProjectCard = function(workspace) {
 
     var copyButton = document.createElement('i')
     copyButton.classList = 'fas fa-copy'
-    var deleteButton = document.createElement('i')
-    deleteButton.classList = 'fas fa-trash-alt'
+    this.deleteButton = document.createElement('i')
+    this.deleteButton.classList = 'fas fa-trash-alt'
     var playButton = document.createElement('i')
     playButton.classList = 'fas fa-play'
-    
+
     playButton.onclick = () => {
         if (this.training) {
             playButton.classList = 'fas fa-play'
@@ -63,12 +64,31 @@ ProjectCard.prototype.addProjectCard = function(workspace) {
         }
     }
 
-    deleteButton.onclick = () => {
-        this.deleteJob(workspace, newCard)
+    copyButton.addEventListener('click', () => {
+        var temp = document.createElement('span')
+        temp.innerHTML = this.restURL
+        temp.onclick = () => {
+            const el = document.createElement('textarea');
+            el.value = this.restURL;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);            
+            console.log('copied')
+        }
+        temp.click()
+    })
+
+    this.deleteButton.onclick = () => {
+        var task = window.confirm('Are you sure you want to delete this model? This cannot be undone.')
+        if (task) {
+            this.handleDelete(userID, projectID)
+            workspace.removeChild(newCard)
+        }
     }
 
     cardOptions.appendChild(copyButton)
-    cardOptions.appendChild(deleteButton)
+    cardOptions.appendChild(this.deleteButton)
     cardOptions.appendChild(playButton)
 
     newCard.appendChild(cardTitle)
@@ -80,18 +100,11 @@ ProjectCard.prototype.addProjectCard = function(workspace) {
     workspace.appendChild(newCard)
 }
 
-ProjectCard.prototype.deleteJob = function(workspace, ele) {
-    console.log('Deleting model')
-    workspace.removeChild(ele)
-}
-
-var setURL = function() {
-    var RESTEndpoint = ''
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    for (var i = 0; i < 8; i++) {
-        RESTEndpoint += possible.charAt(Math.floor(Math.random() * possible.length))
-    }
-    return 'www.sigmoid.com/' + RESTEndpoint
+ProjectCard.prototype.handleDelete = (userID, projectID) => {
+    console.log(this.projectID)
+    const ref = firebase.database().ref()
+    ref.child('Training Data').child(userID).child(projectID).remove()
+    console.log('Deleted record')
 }
 
 // ------------------------------------------------------------------------------------------------------------------------
